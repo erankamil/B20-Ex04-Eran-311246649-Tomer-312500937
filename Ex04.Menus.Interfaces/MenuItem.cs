@@ -15,9 +15,9 @@ namespace Ex04.Menus.Interfaces
         private Notifier<IClickedListener> m_ClickNotifier;
         private Notifier<IBackWasClickedLisenter> m_BackClickedNotifier;
 
-        public MenuItem(string i_Text, MainMenu i_MainListener)
+        public MenuItem(MainMenu i_MainListener)
         {
-            m_Text = i_Text;
+            m_Text = MainMenu.sr_MenuName;
             initializeListener(i_MainListener);
         }
 
@@ -72,7 +72,12 @@ namespace Ex04.Menus.Interfaces
             {
                 Console.WriteLine(currItem.m_ItemIndex.ToString() + ") " + currItem.m_Text);
             }
-            Console.WriteLine("0) To go back/exit press 0");
+            string back = "go back";
+            if(m_Text == MainMenu.sr_MenuName)
+            {
+                back = "exit";
+            }
+            Console.WriteLine("0) To {0}",back);
             getItemChoice();
         }
         

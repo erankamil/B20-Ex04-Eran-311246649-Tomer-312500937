@@ -8,13 +8,13 @@ namespace Ex04.Menus.Interfaces
 {
     public class MainMenu : IClickedListener , IBackWasClickedLisenter
     {
-        private readonly string r_MenuName = "Main Menu";
+        public static readonly string sr_MenuName = "Main Menu";
         public MenuItem m_MainItem;
         private MenuItem m_Prev;
 
         public MainMenu()
         {
-            m_MainItem = new MenuItem(r_MenuName, this);
+            m_MainItem = new MenuItem(this);
             m_MainItem.m_Items = new List<MenuItem>();
             m_Prev = null;
         }
@@ -38,7 +38,7 @@ namespace Ex04.Menus.Interfaces
 
         void IBackWasClickedLisenter.BackClicked()
         {
-            if (m_MainItem.m_Text == r_MenuName)
+            if (m_MainItem.m_Text == sr_MenuName)
             {
                 m_MainItem = null;
             }
