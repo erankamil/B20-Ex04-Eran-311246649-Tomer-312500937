@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ex04.Menus.Interfaces
+namespace Ex04.Menus.Delegates
 {
-    public class MainMenu : IClickedListener , IBackWasClickedLisenter
+
+
+    public class MainMenu
     {
         private MenuItem m_MainItem;
         private MenuItem m_Prev;
@@ -32,7 +34,7 @@ namespace Ex04.Menus.Interfaces
             }
         }
 
-        void IClickedListener.WasClicked(MenuItem i_Item)
+        private void MenuItem_WasClicked(MenuItem i_Item)
         {
             Ex02.ConsoleUtils.Screen.Clear();
             if (i_Item.MenuItems != null)
@@ -43,15 +45,15 @@ namespace Ex04.Menus.Interfaces
             }
             else
             {
-                i_Item.Action.DoAction();
+                i_Item.DoAction();
                 System.Threading.Thread.Sleep(2000);
                 Ex02.ConsoleUtils.Screen.Clear();
             }
         }
 
-        void IBackWasClickedLisenter.BackClicked()
+        private void Back_WasClicked(MenuItem i_Item)
         {
-            if (m_Prev == m_MainItem)
+            if (i_Item.IsMainMenu == true)
             {
                 m_MainItem = null;
             }
@@ -60,7 +62,13 @@ namespace Ex04.Menus.Interfaces
                 m_MainItem = m_Prev;
                 Ex02.ConsoleUtils.Screen.Clear();
             }
-        } 
+        }
+
+        public void BecomeListener(MenuItem i_Item)
+        {
+            i_Item.ReportMenuItemClicked += MenuItem_WasClicked;
+            i_Item.ReportBackClicked += Back_WasClicked;
+        }
 
         public void Show()
         {
@@ -69,7 +77,6 @@ namespace Ex04.Menus.Interfaces
                 m_MainItem.Show();
             }
         }
-    }
-    
 
+    }
 }

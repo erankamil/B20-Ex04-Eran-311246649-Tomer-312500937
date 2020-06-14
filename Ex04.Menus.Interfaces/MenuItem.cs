@@ -6,18 +6,33 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Interfaces
 {
+    public interface IAction
+    {
+        void DoAction();
+    }
+
+    public interface IClickedListener
+    {
+        void WasClicked(MenuItem i_Item);
+    }
+
+    public interface IBackWasClickedLisenter
+    {
+        void BackClicked();
+    }
     public class MenuItem
     {
         private int m_ItemIndex;
-        public string m_Text;
-        public IAction m_Action;
-        public  List<MenuItem> m_Items;
+        private string m_Text;
+        private IAction m_Action;
+        private  List<MenuItem> m_Items;
         private Notifier<IClickedListener> m_ClickNotifier;
         private Notifier<IBackWasClickedLisenter> m_BackClickedNotifier;
+        private bool m_IsMainMenu;
 
-        public MenuItem(MainMenu i_MainListener)
+        public MenuItem(string i_Text, MainMenu i_MainListener)
         {
-            m_Text = MainMenu.sr_MenuName;
+            m_Text = i_Text;
             initializeListener(i_MainListener);
         }
 
@@ -44,6 +59,52 @@ namespace Ex04.Menus.Interfaces
             m_BackClickedNotifier = new Notifier<IBackWasClickedLisenter>();
             m_BackClickedNotifier.AddListeners(i_MainListener);
         }
+        public bool IsMainMenu
+        {
+            get
+            {
+                return m_IsMainMenu;
+            }
+
+            set
+            {
+                m_IsMainMenu = value;
+            }
+        }
+
+        public string Text
+        {
+            get
+            {
+                return m_Text;
+            }
+
+            set
+            {
+                m_Text = value;
+            }
+        }
+
+        public List<MenuItem> MenuItems
+        {
+            get
+            {
+                return m_Items;
+            }
+
+            set
+            {
+                m_Items = value;
+            }
+        }
+        
+        public IAction Action
+        {
+            get
+            {
+                return m_Action;
+            }
+        }
 
         private void getItemChoice()
         {
@@ -60,7 +121,7 @@ namespace Ex04.Menus.Interfaces
                 doWhenBackClicked();
             }
             else
-            {// the menu tell his menuItem he was choosen
+            {
                 m_Items[int.Parse(choice) - 1].doWhenClicked(m_Items[int.Parse(choice) - 1], int.Parse(choice));
             }
         }
@@ -73,7 +134,7 @@ namespace Ex04.Menus.Interfaces
                 Console.WriteLine(currItem.m_ItemIndex.ToString() + ") " + currItem.m_Text);
             }
             string back = "go back";
-            if(m_Text == MainMenu.sr_MenuName)
+            if(IsMainMenu == true)
             {
                 back = "exit";
             }
@@ -100,7 +161,6 @@ namespace Ex04.Menus.Interfaces
             return isValid;
         }
 
-        // MenuItem notifies the system(MainMenu) he was clicked
         private void doWhenClicked(MenuItem i_Item, int i_ChoiceIndex)
         {
              m_ClickNotifier.NotifyAllListerners(i_Item, i_ChoiceIndex);
@@ -146,13 +206,6 @@ namespace Ex04.Menus.Interfaces
             }
         }
     }
-
-    public interface IAction
-    {
-        void DoAction();
-    }
-
-
 }
 
 
