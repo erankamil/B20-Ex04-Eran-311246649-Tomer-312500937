@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-
-
     public class MainMenu
     {
         private MenuItem m_MainItem;
@@ -77,6 +75,5 @@ namespace Ex04.Menus.Delegates
                 m_MainItem.Show();
             }
         }
-
     }
 }

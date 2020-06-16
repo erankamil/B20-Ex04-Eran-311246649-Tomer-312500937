@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Ex04;
 
-
 namespace Ex04.Menus.Test
 {
     public class Program
@@ -24,7 +23,7 @@ namespace Ex04.Menus.Test
             DelegateMenu(delegateMenu);
         }
 
-        public static void InterFaceMenu(Interfaces.MainMenu i_Menu)
+        internal static void InterFaceMenu(Interfaces.MainMenu i_Menu)
         {
             CountCapital count = new CountCapital();
             Interfaces.MenuItem CountCapital = new Interfaces.MenuItem("Count Capital", 1, count, i_Menu);
@@ -51,12 +50,10 @@ namespace Ex04.Menus.Test
             Interfaces.MenuItem two = new Interfaces.MenuItem("Show Date/Time", 2, dateAndTime, i_Menu);
             i_Menu.CurrentMenu.MenuItems.Add(two);
 
-
             i_Menu.Show();
         }
        
-
-        public static void DelegateMenu(Delegates.MainMenu i_Menu)
+        internal static void DelegateMenu(Delegates.MainMenu i_Menu)
         {
             Delegates.MenuItem countCapital = new Delegates.MenuItem("Count Capital", i_Menu);
             countCapital.Action += CountCapitalAction;
@@ -64,14 +61,12 @@ namespace Ex04.Menus.Test
             Delegates.MenuItem showVersion = new Delegates.MenuItem("Show Version", i_Menu);
             showVersion.Action += ShowVersionAction;
 
-
             List<Delegates.MenuItem> digitAndVersion = new List<Delegates.MenuItem>();
             digitAndVersion.Add(countCapital);
             digitAndVersion.Add(showVersion);
  
             Delegates.MenuItem one = new Delegates.MenuItem("Version and Digits", digitAndVersion, i_Menu);
             i_Menu.CurrentMenu.MenuItems.Add(one);
-
 
             Delegates.MenuItem showTime = new Delegates.MenuItem("Show Time", i_Menu);
             showTime.Action += ShowTimeAction;
@@ -89,9 +84,7 @@ namespace Ex04.Menus.Test
             i_Menu.Show();
         }
 
-
-
-        public static void CountCapitalAction(Delegates.MenuItem i_Item)
+        internal static void CountCapitalAction(Delegates.MenuItem i_Item)
         {
             Console.WriteLine("Please enter a sentence:");
             string sentence = Console.ReadLine();
@@ -103,47 +96,49 @@ namespace Ex04.Menus.Test
                     count++;
                 }
             }
+
             Console.WriteLine("Number of upper case letters: {0}", count);
         }
 
-        public static void ShowVersionAction(Delegates.MenuItem i_Item)
+        internal static void ShowVersionAction(Delegates.MenuItem i_Item)
         {
             Console.WriteLine("The version is: Version: 20.2.4.30620");
         }
 
-        public static void ShowTimeAction(Delegates.MenuItem i_Item)
+        internal static void ShowTimeAction(Delegates.MenuItem i_Item)
         {
             DateTime time = DateTime.Now;
 
             Console.WriteLine(time.ToShortTimeString());
         }
 
-        public static void ShowDateAction(Delegates.MenuItem i_Item)
+        internal static void ShowDateAction(Delegates.MenuItem i_Item)
         {
             DateTime now = DateTime.Today;
 
             Console.WriteLine(now.ToShortDateString());
         }
 
-        public struct CountCapital : Interfaces.IAction
+        internal struct CountCapital : Interfaces.IAction
         {
             void Interfaces.IAction.DoAction() /// expilict implement 
             {
                 Console.WriteLine("Please enter a sentence:");
                 string sentence = Console.ReadLine();
                 int count = 0;
-                for(int i=0; i < sentence.Length; i++)
+                for(int i = 0; i < sentence.Length; i++)
                 {
                     if(char.IsUpper(sentence[i]) == true)
                     {
                         count++;
                     }
                 }
+
                 Console.WriteLine("Number of upper case letters: {0}", count);
             }
         }
 
-        public struct ShowTime : Interfaces.IAction
+        internal struct ShowTime : Interfaces.IAction
         {
             void Interfaces.IAction.DoAction() /// expilict implement 
             {
@@ -153,7 +148,7 @@ namespace Ex04.Menus.Test
             }
         }
 
-        public struct ShowDate : Interfaces.IAction
+        internal struct ShowDate : Interfaces.IAction
         {
             void Interfaces.IAction.DoAction() /// expilict implement 
             {
@@ -163,13 +158,12 @@ namespace Ex04.Menus.Test
             }
         }
 
-        public struct ShowVersion : Interfaces.IAction
+        internal struct ShowVersion : Interfaces.IAction
         {
-            void Interfaces.IAction.DoAction() /// expilict implement 
+            void Interfaces.IAction.DoAction()  
             {
                 Console.WriteLine("The version is: Version: 20.2.4.30620");
             }
         }
     }
-
 }

@@ -20,12 +20,13 @@ namespace Ex04.Menus.Interfaces
     {
         void BackClicked();
     }
+
     public class MenuItem
     {
         private int m_ItemIndex;
         private string m_Text;
         private IAction m_Action;
-        private  List<MenuItem> m_Items;
+        private List<MenuItem> m_Items;
         private Notifier<IClickedListener> m_ClickNotifier;
         private Notifier<IBackWasClickedLisenter> m_BackClickedNotifier;
         private bool m_IsMainMenu;
@@ -36,7 +37,7 @@ namespace Ex04.Menus.Interfaces
             initializeListener(i_MainListener);
         }
 
-        public MenuItem(string i_Text,int i_ItemIndex, IAction i_Action, MainMenu i_MainListener)
+        public MenuItem(string i_Text, int i_ItemIndex, IAction i_Action, MainMenu i_MainListener)
         {
             m_Text = i_Text;
             m_ItemIndex = i_ItemIndex;
@@ -59,6 +60,7 @@ namespace Ex04.Menus.Interfaces
             m_BackClickedNotifier = new Notifier<IBackWasClickedLisenter>();
             m_BackClickedNotifier.AddListeners(i_MainListener);
         }
+
         public bool IsMainMenu
         {
             get
@@ -133,24 +135,26 @@ namespace Ex04.Menus.Interfaces
             {
                 Console.WriteLine(currItem.m_ItemIndex.ToString() + ") " + currItem.m_Text);
             }
+
             string back = "go back";
             if(IsMainMenu == true)
             {
                 back = "exit";
             }
-            Console.WriteLine("0) To {0}",back);
+
+            Console.WriteLine("0) To {0}", back);
             getItemChoice();
         }
         
         private bool checkValidChoice(string i_ChoiceStr)
         {
-            bool isValid = true;
-           if(int.TryParse(i_ChoiceStr,out int res))
+           bool isValid = true;
+           if(int.TryParse(i_ChoiceStr, out int res))
             {
                 if(res < 0 || res > m_Items.Count)
                 {
                     isValid = false;
-                    Console.WriteLine("Index out of range! Min {0} Max {1}",0 , m_Items.Count);
+                    Console.WriteLine("Index out of range! Min {0} Max {1}", 0, m_Items.Count);
                 }
             }
            else
@@ -158,6 +162,7 @@ namespace Ex04.Menus.Interfaces
                 isValid = false;
                 Console.WriteLine("Choice must be index from the menu");
             }
+
             return isValid;
         }
 
@@ -170,7 +175,6 @@ namespace Ex04.Menus.Interfaces
         {
             m_BackClickedNotifier.NotifyAllListerners(this, 0);
         }
-
     }
 
     public class Notifier<T>
@@ -183,6 +187,7 @@ namespace Ex04.Menus.Interfaces
             {
                 m_Listeners = new List<T>();
             }
+
             m_Listeners.Add(i_Listener);
         }
 
@@ -191,7 +196,7 @@ namespace Ex04.Menus.Interfaces
             m_Listeners.Remove(i_Listener);
         }
 
-        public void NotifyAllListerners(MenuItem i_Item,int indexChoice)
+        public void NotifyAllListerners(MenuItem i_Item, int indexChoice)
         {
             foreach(T listener in m_Listeners)
             {
@@ -207,7 +212,3 @@ namespace Ex04.Menus.Interfaces
         }
     }
 }
-
-
-
-

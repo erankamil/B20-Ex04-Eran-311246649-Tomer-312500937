@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 namespace Ex04.Menus.Delegates
 {
     public delegate void ReportMenuItemClicked(MenuItem i_Item);
+
     public delegate void ReportBackClicked(MenuItem i_Item);
- 
 
     public class MenuItem
     {
         private string m_Text;
-        private Action<MenuItem>  m_Action;
-        private event ReportMenuItemClicked m_MenuItemClicked;
-        private event ReportBackClicked m_BackClicked;
+        private Action<MenuItem> m_Action;
         private List<MenuItem> m_Items;
         private bool m_IsMainMenu;
+
+        private event ReportMenuItemClicked m_MenuItemClicked;
+
+        private event ReportBackClicked m_BackClicked;
 
         public MenuItem(string i_Text, MainMenu i_Menu)
         {
@@ -139,12 +141,13 @@ namespace Ex04.Menus.Delegates
                 Console.WriteLine(i.ToString() + ") " + currItem.m_Text);
                 i++;
             }
-            string back = "go back";
 
+            string back = "go back";
             if (IsMainMenu == true)
             {
                 back = "exit";
             }
+
             Console.WriteLine("0) To {0}", back);
             getItemChoice();
         }
@@ -165,6 +168,7 @@ namespace Ex04.Menus.Delegates
                 isValid = false;
                 Console.WriteLine("Choice must be index from the menu");
             }
+
             return isValid;
         }
 
@@ -172,7 +176,6 @@ namespace Ex04.Menus.Delegates
         {
             m_Action?.Invoke(this);
         }
-
 
         private void doWhenMenuItemClicked()
         {
@@ -193,6 +196,5 @@ namespace Ex04.Menus.Delegates
         {
             m_BackClicked?.Invoke(this);
         }
-
     }
-    }
+}

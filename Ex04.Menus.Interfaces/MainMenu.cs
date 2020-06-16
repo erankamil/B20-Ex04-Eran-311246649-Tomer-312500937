@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Interfaces
 {
-    public class MainMenu : IClickedListener , IBackWasClickedLisenter
+    public class MainMenu : IClickedListener, IBackWasClickedLisenter
     {
         private MenuItem m_MainItem;
         private MenuItem m_Prev;
@@ -70,6 +70,4 @@ namespace Ex04.Menus.Interfaces
             }
         }
     }
-    
-
 }
