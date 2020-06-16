@@ -16,6 +16,7 @@ namespace Ex04.Menus.Delegates
         private Action<MenuItem> m_Action;
         private List<MenuItem> m_Items;
         private bool m_IsMainMenu;
+        private MenuItem m_Prev;
 
         private event ReportMenuItemClicked m_MenuItemClicked;
 
@@ -32,6 +33,19 @@ namespace Ex04.Menus.Delegates
             m_Text = i_Text;
             m_Items = i_Items;
             i_Menu.BecomeListener(this);
+        }
+
+        public MenuItem PrevMenuItem
+        {
+            get
+            {
+                return m_Prev;
+            }
+
+            set
+            {
+                m_Prev = value;
+            }
         }
 
         public string Text

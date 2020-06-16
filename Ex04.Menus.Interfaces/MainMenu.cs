@@ -9,17 +9,16 @@ namespace Ex04.Menus.Interfaces
     public class MainMenu : IClickedListener, IBackWasClickedLisenter
     {
         private MenuItem m_MainItem;
-        private MenuItem m_Prev;
 
         public MainMenu(string i_Text)
         {
             m_MainItem = new MenuItem(i_Text, this);
             m_MainItem.IsMainMenu = true;
             m_MainItem.MenuItems = new List<MenuItem>();
-            m_Prev = null;
+            m_MainItem.PrevMenuItem = null;
         }
 
-        public MenuItem CurrentMenu
+        public MenuItem CurrentMenuItem
         {
             get
             {
@@ -37,7 +36,6 @@ namespace Ex04.Menus.Interfaces
             Ex02.ConsoleUtils.Screen.Clear();
             if (i_Item.MenuItems != null)
             {
-                m_Prev = m_MainItem;
                 m_MainItem = i_Item;
                 i_Item.Show();
             }
@@ -49,15 +47,15 @@ namespace Ex04.Menus.Interfaces
             }
         }
 
-        void IBackWasClickedLisenter.BackClicked()
+        void IBackWasClickedLisenter.BackClicked(MenuItem i_MenuItem)
         {
-            if (m_Prev == m_MainItem)
+            if (i_MenuItem.IsMainMenu == true)
             {
                 m_MainItem = null;
             }
             else
             {
-                m_MainItem = m_Prev;
+                m_MainItem = i_MenuItem.PrevMenuItem;
                 Ex02.ConsoleUtils.Screen.Clear();
             }
         } 

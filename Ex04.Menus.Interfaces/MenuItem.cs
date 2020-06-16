@@ -18,7 +18,7 @@ namespace Ex04.Menus.Interfaces
 
     public interface IBackWasClickedLisenter
     {
-        void BackClicked();
+        void BackClicked(MenuItem i_MenuItem);
     }
 
     public class MenuItem
@@ -30,6 +30,7 @@ namespace Ex04.Menus.Interfaces
         private Notifier<IClickedListener> m_ClickNotifier;
         private Notifier<IBackWasClickedLisenter> m_BackClickedNotifier;
         private bool m_IsMainMenu;
+        private MenuItem m_Prev;
 
         public MenuItem(string i_Text, MainMenu i_MainListener)
         {
@@ -105,6 +106,19 @@ namespace Ex04.Menus.Interfaces
             get
             {
                 return m_Action;
+            }
+        }
+
+        public MenuItem PrevMenuItem
+        {
+            get
+            {
+                return m_Prev;
+            }
+
+            set
+            {
+                m_Prev = value;
             }
         }
 
@@ -206,7 +220,7 @@ namespace Ex04.Menus.Interfaces
                 }
                 else
                 {
-                    (listener as IBackWasClickedLisenter).BackClicked();
+                    (listener as IBackWasClickedLisenter).BackClicked(i_Item);
                 }
             }
         }

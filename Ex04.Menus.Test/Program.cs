@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ex04;
 
 namespace Ex04.Menus.Test
 {
@@ -31,24 +27,27 @@ namespace Ex04.Menus.Test
             ShowVersion version = new ShowVersion();
             Interfaces.MenuItem ShowVersion = new Interfaces.MenuItem("Show Version", 2, version, i_Menu);
 
-            List<Interfaces.MenuItem> digitAndVersion = new List<Interfaces.MenuItem>();
-            digitAndVersion.Add(CountCapital);
-            digitAndVersion.Add(ShowVersion);
+            List<Interfaces.MenuItem> listDigitAndVersion = new List<Interfaces.MenuItem>();
+            listDigitAndVersion.Add(CountCapital);
+            listDigitAndVersion.Add(ShowVersion);
 
-            Interfaces.MenuItem one = new Interfaces.MenuItem("Version and Digits", 1, digitAndVersion, i_Menu);
-            i_Menu.CurrentMenu.MenuItems.Add(one);
+            Interfaces.MenuItem digitAndVersion = new Interfaces.MenuItem("Version and Digits", 1, listDigitAndVersion, i_Menu);
+            i_Menu.CurrentMenuItem.MenuItems.Add(digitAndVersion);
 
             ShowTime time = new ShowTime();
             Interfaces.MenuItem showTime = new Interfaces.MenuItem("Show Time", 1, time, i_Menu);
             ShowDate date = new ShowDate();
             Interfaces.MenuItem showDate = new Interfaces.MenuItem("Show Date", 2, date, i_Menu);
 
-            List<Interfaces.MenuItem> dateAndTime = new List<Interfaces.MenuItem>();
-            dateAndTime.Add(showTime);
-            dateAndTime.Add(showDate);
+            List<Interfaces.MenuItem> listDateAndTime = new List<Interfaces.MenuItem>();
+            listDateAndTime.Add(showTime);
+            listDateAndTime.Add(showDate);
 
-            Interfaces.MenuItem two = new Interfaces.MenuItem("Show Date/Time", 2, dateAndTime, i_Menu);
-            i_Menu.CurrentMenu.MenuItems.Add(two);
+            Interfaces.MenuItem dateAndTime = new Interfaces.MenuItem("Show Date/Time", 2, listDateAndTime, i_Menu);
+            i_Menu.CurrentMenuItem.MenuItems.Add(dateAndTime);
+
+            dateAndTime.PrevMenuItem = i_Menu.CurrentMenuItem;
+            digitAndVersion.PrevMenuItem = i_Menu.CurrentMenuItem;
 
             i_Menu.Show();
         }
@@ -61,12 +60,14 @@ namespace Ex04.Menus.Test
             Delegates.MenuItem showVersion = new Delegates.MenuItem("Show Version", i_Menu);
             showVersion.Action += ShowVersionAction;
 
-            List<Delegates.MenuItem> digitAndVersion = new List<Delegates.MenuItem>();
-            digitAndVersion.Add(countCapital);
-            digitAndVersion.Add(showVersion);
- 
-            Delegates.MenuItem one = new Delegates.MenuItem("Version and Digits", digitAndVersion, i_Menu);
-            i_Menu.CurrentMenu.MenuItems.Add(one);
+            List<Delegates.MenuItem> listVersionAndDigit = new List<Delegates.MenuItem>();
+            listVersionAndDigit.Add(countCapital);
+            listVersionAndDigit.Add(showVersion);
+
+            Delegates.MenuItem versionAndDigit = new Delegates.MenuItem("Version and Digits", listVersionAndDigit, i_Menu);
+            i_Menu.CurrentMenuItem.MenuItems.Add(versionAndDigit);
+
+            versionAndDigit.PrevMenuItem = i_Menu.CurrentMenuItem;
 
             Delegates.MenuItem showTime = new Delegates.MenuItem("Show Time", i_Menu);
             showTime.Action += ShowTimeAction;
@@ -74,12 +75,14 @@ namespace Ex04.Menus.Test
             Delegates.MenuItem showDate = new Delegates.MenuItem("Show Date", i_Menu);
             showDate.Action += ShowDateAction;
 
-            List<Delegates.MenuItem> dateAndTime = new List<Delegates.MenuItem>();
-            dateAndTime.Add(showTime);
-            dateAndTime.Add(showDate);
+            List<Delegates.MenuItem> listDateAndTime = new List<Delegates.MenuItem>();
+            listDateAndTime.Add(showTime);
+            listDateAndTime.Add(showDate);
 
-            Delegates.MenuItem two = new Delegates.MenuItem("Show Date/Time", dateAndTime, i_Menu);
-            i_Menu.CurrentMenu.MenuItems.Add(two);
+            Delegates.MenuItem dateAndTime = new Delegates.MenuItem("Show Date/Time", listDateAndTime, i_Menu);
+            i_Menu.CurrentMenuItem.MenuItems.Add(dateAndTime);
+
+            dateAndTime.PrevMenuItem = i_Menu.CurrentMenuItem;
 
             i_Menu.Show();
         }

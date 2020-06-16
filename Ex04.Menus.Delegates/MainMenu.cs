@@ -9,17 +9,16 @@ namespace Ex04.Menus.Delegates
     public class MainMenu
     {
         private MenuItem m_MainItem;
-        private MenuItem m_Prev;
 
         public MainMenu(string i_Text)
         {
             m_MainItem = new MenuItem(i_Text, this);
             m_MainItem.IsMainMenu = true;
+            m_MainItem.PrevMenuItem = null;
             m_MainItem.MenuItems = new List<MenuItem>();
-            m_Prev = null;
         }
 
-        public MenuItem CurrentMenu
+        public MenuItem CurrentMenuItem
         {
             get
             {
@@ -37,7 +36,6 @@ namespace Ex04.Menus.Delegates
             Ex02.ConsoleUtils.Screen.Clear();
             if (i_Item.MenuItems != null)
             {
-                m_Prev = m_MainItem;
                 m_MainItem = i_Item;
                 i_Item.Show();
             }
@@ -57,7 +55,7 @@ namespace Ex04.Menus.Delegates
             }
             else
             {
-                m_MainItem = m_Prev;
+                m_MainItem = i_Item.PrevMenuItem;
                 Ex02.ConsoleUtils.Screen.Clear();
             }
         }
