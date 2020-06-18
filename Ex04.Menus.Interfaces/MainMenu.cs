@@ -12,10 +12,33 @@ namespace Ex04.Menus.Interfaces
 
         public MainMenu(string i_Text)
         {
-            m_MainItem = new MenuItem(i_Text, this);
+            initializeMainMenuItem(i_Text);
+        }
+
+        private void initializeMainMenuItem(string i_Text)
+        {
+            m_MainItem = new MenuItem(i_Text, 0);
             m_MainItem.IsMainMenu = true;
-            m_MainItem.MenuItems = new List<MenuItem>();
             m_MainItem.PrevMenuItem = null;
+            m_MainItem.BackClickedNotifier.AddListeners(this);
+            m_MainItem.MenuItemClickedNotifier.AddListeners(this);
+        }
+
+        public void AddToMainMenu(MenuItem i_Item)
+        {
+            if(m_MainItem.MenuItems == null)
+            {
+                m_MainItem.MenuItems = new List<MenuItem>();
+            }
+
+            m_MainItem.MenuItems.Add(i_Item);
+            if(i_Item.Action == null)
+            {
+                i_Item.BackClickedNotifier.AddListeners(this);
+            }
+
+            i_Item.MenuItemClickedNotifier.AddListeners(this);
+            i_Item.PrevMenuItem = this.m_MainItem;
         }
 
         public MenuItem CurrentMenuItem

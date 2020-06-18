@@ -13,26 +13,44 @@ namespace Ex04.Menus.Delegates
     public class MenuItem
     {
         private string m_Text;
-        private Action<MenuItem> m_Action;
         private List<MenuItem> m_Items;
         private bool m_IsMainMenu;
         private MenuItem m_Prev;
 
-        private event ReportMenuItemClicked m_MenuItemClicked;
+        public event Action m_Action;
 
-        private event ReportBackClicked m_BackClicked;
+        public event ReportMenuItemClicked m_MenuItemClicked;
 
-        public MenuItem(string i_Text, MainMenu i_Menu)
+        public event ReportBackClicked m_BackClicked;
+
+        public MenuItem(string i_Text)
         {
             m_Text = i_Text;
-            i_Menu.BecomeListener(this);
         }
 
-        public MenuItem(string i_Text, List<MenuItem> i_Items, MainMenu i_Menu)
+        public void AddToSubMenu(MenuItem i_ItemToAdd)
         {
-            m_Text = i_Text;
-            m_Items = i_Items;
-            i_Menu.BecomeListener(this);
+            if(m_Items == null)
+            {
+                m_Items = new List<MenuItem>();
+            }
+
+            m_Items.Add(i_ItemToAdd);
+            if (i_ItemToAdd.Action == null)
+            {
+                i_ItemToAdd.m_BackClicked += m_BackClicked;
+                i_ItemToAdd.m_MenuItemClicked += m_MenuItemClicked;
+            }
+
+             i_ItemToAdd.m_Action += m_Action;
+        }
+
+        public Action Action
+        {
+            get
+            {
+                return m_Action;
+            }
         }
 
         public MenuItem PrevMenuItem
@@ -87,45 +105,6 @@ namespace Ex04.Menus.Delegates
             }
         }
 
-        public event ReportMenuItemClicked ReportMenuItemClicked
-        {
-            add
-            {
-                m_MenuItemClicked += value;
-            }
-
-            remove
-            {
-                m_MenuItemClicked -= value;
-            }
-        }
-
-        public event ReportBackClicked ReportBackClicked
-        {
-            add
-            {
-                m_BackClicked += value;
-            }
-
-            remove
-            {
-                m_BackClicked -= value;
-            }
-        }
-
-        public event Action<MenuItem> Action
-        {
-            add
-            {
-                m_Action += value;
-            }
-
-            remove
-            {
-                m_Action -= value;
-            }
-        }
-
         private void getItemChoice()
         {
             string choice;
@@ -142,7 +121,14 @@ namespace Ex04.Menus.Delegates
             }
             else
             {
-                m_Items[int.Parse(choice) - 1].doWhenMenuItemClicked();
+                if (m_Items[int.Parse(choice) - 1].m_Items == null)
+                {
+                    m_Items[int.Parse(choice) - 1].doWhenActionClicked();
+                }
+                else
+                {
+                    m_Items[int.Parse(choice) - 1].doWhenMenuItemClicked();
+                }
             }
         }
 
@@ -186,27 +172,33 @@ namespace Ex04.Menus.Delegates
             return isValid;
         }
 
-        public void DoAction()
+        private void doWhenActionClicked()
         {
-            m_Action?.Invoke(this);
+            OnActionClicked();
+        }
+
+        protected virtual void OnActionClicked()
+        {
+            Ex02.ConsoleUtils.Screen.Clear();
+            m_Action?.Invoke();
         }
 
         private void doWhenMenuItemClicked()
         {
-            onMenuItemClicked();
+            OnMenuItemClicked();
         }
 
-        private void onMenuItemClicked()
+        protected virtual void OnMenuItemClicked()
         {
             m_MenuItemClicked?.Invoke(this);
         }
 
         private void doWhenBackClicked()
         {
-            onBackClicked();
+            OnBackClicked();
         }
 
-        private void onBackClicked()
+        protected virtual void OnBackClicked()
         {
             m_BackClicked?.Invoke(this);
         }

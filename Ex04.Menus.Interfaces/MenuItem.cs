@@ -32,34 +32,43 @@ namespace Ex04.Menus.Interfaces
         private bool m_IsMainMenu;
         private MenuItem m_Prev;
 
-        public MenuItem(string i_Text, MainMenu i_MainListener)
-        {
-            m_Text = i_Text;
-            initializeListener(i_MainListener);
-        }
-
-        public MenuItem(string i_Text, int i_ItemIndex, IAction i_Action, MainMenu i_MainListener)
+        public MenuItem(string i_Text, int i_ItemIndex, IAction i_Action)
         {
             m_Text = i_Text;
             m_ItemIndex = i_ItemIndex;
             m_Action = i_Action;
-            initializeListener(i_MainListener);
+            initializeNotifiers();
         }
 
-        public MenuItem(string i_Text, int i_ItemIndex, List<MenuItem> i_Items, MainMenu i_MainListener)
+        public MenuItem(string i_Text, int i_ItemIndex = 0)
         {
             m_Text = i_Text;
             m_ItemIndex = i_ItemIndex;
-            m_Items = i_Items;
-            initializeListener(i_MainListener);
+            initializeNotifiers();
         }
 
-        private void initializeListener(MainMenu i_MainListener)
+        private void initializeNotifiers()
         {
             m_ClickNotifier = new Notifier<IClickedListener>();
-            m_ClickNotifier.AddListeners(i_MainListener);
             m_BackClickedNotifier = new Notifier<IBackWasClickedLisenter>();
-            m_BackClickedNotifier.AddListeners(i_MainListener);
+        }
+
+        public void AddToSubMenu(MenuItem i_Item)
+        {
+            if(m_Items == null)
+            {
+                m_Items = new List<MenuItem>();
+            }
+
+            m_Items.Add(i_Item);
+            if(i_Item.Action == null)
+            {
+                IBackWasClickedLisenter backListener = this.BackClickedNotifier.Listerners.First();
+                i_Item.BackClickedNotifier.AddListeners(backListener);
+            }
+
+            IClickedListener Clickedlistener = this.MenuItemClickedNotifier.Listerners.First();
+            i_Item.MenuItemClickedNotifier.AddListeners(Clickedlistener);
         }
 
         public bool IsMainMenu
@@ -109,6 +118,22 @@ namespace Ex04.Menus.Interfaces
             }
         }
 
+        public Notifier<IClickedListener> MenuItemClickedNotifier
+        {
+            get
+            {
+                return m_ClickNotifier;
+            }
+        }
+
+        public Notifier<IBackWasClickedLisenter> BackClickedNotifier
+        {
+            get
+            {
+                return m_BackClickedNotifier;
+            }
+        }
+
         public MenuItem PrevMenuItem
         {
             get
@@ -142,7 +167,7 @@ namespace Ex04.Menus.Interfaces
             }
         }
 
-        public void Show()
+        internal void Show()
         {
             Console.WriteLine("======{0}=======", m_Text);
             foreach (MenuItem currItem in m_Items)
@@ -194,6 +219,14 @@ namespace Ex04.Menus.Interfaces
     public class Notifier<T>
     {
         private List<T> m_Listeners;
+
+        public List<T> Listerners
+        {
+            get
+            {
+                return m_Listeners;
+            }
+        }
 
         public void AddListeners(T i_Listener)
         {

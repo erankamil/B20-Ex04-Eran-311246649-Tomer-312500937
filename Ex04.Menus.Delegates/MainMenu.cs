@@ -12,10 +12,59 @@ namespace Ex04.Menus.Delegates
 
         public MainMenu(string i_Text)
         {
-            m_MainItem = new MenuItem(i_Text, this);
+            initializeMainMenuItem(i_Text);
+        }
+
+        private void initializeMainMenuItem(string i_Text)
+        {
+            m_MainItem = new MenuItem(i_Text);
             m_MainItem.IsMainMenu = true;
             m_MainItem.PrevMenuItem = null;
             m_MainItem.MenuItems = new List<MenuItem>();
+            m_MainItem.m_BackClicked += M_MainItem_ReportBackClicked;
+            m_MainItem.m_MenuItemClicked += M_MainItem_ReportMenuItemClicked;
+            m_MainItem.m_Action += M_MainItem_m_Action;
+        }
+
+        private void M_MainItem_m_Action()
+        {
+            System.Threading.Thread.Sleep(2000);
+            Ex02.ConsoleUtils.Screen.Clear();
+        }
+
+        public void AddToMainMenu(MenuItem i_Item)
+        {
+            m_MainItem.MenuItems.Add(i_Item);
+            i_Item.m_BackClicked += M_MainItem_ReportBackClicked;
+            i_Item.m_MenuItemClicked += M_MainItem_ReportMenuItemClicked;
+            i_Item.m_Action += I_Item_m_Action;
+            i_Item.PrevMenuItem = this.m_MainItem;
+        }
+
+        private void I_Item_m_Action()
+        {
+            System.Threading.Thread.Sleep(2000);
+            Ex02.ConsoleUtils.Screen.Clear();
+        }
+
+        private void M_MainItem_ReportMenuItemClicked(MenuItem i_Item)
+        {
+            Ex02.ConsoleUtils.Screen.Clear();
+            m_MainItem = i_Item;
+            i_Item.Show();
+        }
+
+        private void M_MainItem_ReportBackClicked(MenuItem i_Item)
+        {
+            if (i_Item.IsMainMenu == true)
+            {
+                m_MainItem = null;
+            }
+            else
+            {
+                m_MainItem = i_Item.PrevMenuItem;
+                Ex02.ConsoleUtils.Screen.Clear();
+            }
         }
 
         public MenuItem CurrentMenuItem
@@ -29,41 +78,6 @@ namespace Ex04.Menus.Delegates
             {
                 m_MainItem = value;
             }
-        }
-
-        private void MenuItem_WasClicked(MenuItem i_Item)
-        {
-            Ex02.ConsoleUtils.Screen.Clear();
-            if (i_Item.MenuItems != null)
-            {
-                m_MainItem = i_Item;
-                i_Item.Show();
-            }
-            else
-            {
-                i_Item.DoAction();
-                System.Threading.Thread.Sleep(2000);
-                Ex02.ConsoleUtils.Screen.Clear();
-            }
-        }
-
-        private void Back_WasClicked(MenuItem i_Item)
-        {
-            if (i_Item.IsMainMenu == true)
-            {
-                m_MainItem = null;
-            }
-            else
-            {
-                m_MainItem = i_Item.PrevMenuItem;
-                Ex02.ConsoleUtils.Screen.Clear();
-            }
-        }
-
-        public void BecomeListener(MenuItem i_Item)
-        {
-            i_Item.ReportMenuItemClicked += MenuItem_WasClicked;
-            i_Item.ReportBackClicked += Back_WasClicked;
         }
 
         public void Show()
